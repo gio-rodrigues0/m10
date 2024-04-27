@@ -1,0 +1,55 @@
+# Use postgres/example user/password credentials
+version: '3.9'
+
+services:
+  api:
+    image: python:3.9
+    working_dir: /app
+    volumes:
+      - pip39:/usr/local/lib/python3.9/site-packages
+      - .:/app
+    ports:
+      - "5005:5000"
+    command: python app.py
+    restart: on-failure
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    depends_on:
+      - requirements
+
+  requirements:
+    image: python:3.9-slim-buster
+    working_dir: /app
+    volumes:
+      - pip39:/usr/local/lib/python3.9/site-packages
+      - .:/app
+    command: pip install -r requirements.txt
+
+
+  db:
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: example
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+volumes:
+  pip39:
