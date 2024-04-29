@@ -4,11 +4,6 @@ API que cria, edita e deleta tarefas, como autenticação de usuário utilizando
 
 ## Como utilizar?
 
-- Instale as dependências da aplicação
-```
-pip install -r requirements.txt
-```
-
 - Crie o banco de dados
 ```
 python main.py create_db
@@ -16,5 +11,9 @@ python main.py create_db
 
 - Rode a API
 ```
-python -m flask --app main run
+docker-compose up
 ```
+
+## Demonstração
+
+<video controls src="Gravando 2024-04-29 034834.mp4" title="Demonstração"></video>

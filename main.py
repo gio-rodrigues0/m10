@@ -10,13 +10,14 @@ import requests as http_request
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://postgres:postgres@db:5432/project"
 
 db.init_app(app)
 
 app.config["JWT_SECRET_KEY"] = "giovanna-linda" 
 
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config['JWT_COOKIE_CSRF_PROTECT'] = False
 jwt = JWTManager(app)
 
 if len(sys.argv) > 1 and sys.argv[1] == 'create_db':
@@ -132,7 +133,7 @@ def create_task():
 def update_task(id):
     data = request.json
     task = Tasks.query.get(id)
-    task.name = data["description"]
+    task.description = data["description"]
     db.session.commit()
     return jsonify(task.serialize())
 
@@ -143,3 +144,6 @@ def delete_task(id):
     db.session.delete(task)
     db.session.commit()
     return jsonify(task.serialize())
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000) 
